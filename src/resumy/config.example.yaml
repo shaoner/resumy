@@ -1,0 +1,106 @@
+version: 0.0.1
+profile:
+  firstname: Anakin
+  lastname: Skywalker
+  github_username: alexlren
+  linkedin_username: anakin
+  country: Tatooine
+  city: Mos Eisley
+  portfolio_url: https://shaoner.com
+  email: anakin@skywalker.com
+  phone: 123-456-7890
+skills:
+  title: Skills
+  content:
+    - title: Languages
+      category: languages
+      content:
+        - name: Rust
+          experience: 3
+        - name: Python
+          experience: 10
+    - title: Frameworks/libraries
+      category: frameworks
+      content:
+        - name: numpy
+        - name: Qt
+    - title: Devops
+      category: devops
+      content:
+        - name: AWS
+        - name: docker
+          experience: 10
+        - name: kubernetes
+    - title: Tools
+      category: tools
+      content:
+        - name: emacs
+        - name: Makefile
+    - title: OS
+      category: os
+      content:
+        - name: Linux
+        - name: FreeBSD
+job_experience:
+  title: Experience
+  content:
+    - company_name: Empire
+      title: Darth Vader
+      location:
+        city: Mothership
+        country: US
+      from:
+        month: Aug
+        year: 2016
+      present: 'Present'
+      description:
+        - Killed a few rebels here and there
+        - Tracked Jedi all around the galaxy
+        - Practiced the force with my master Darth Sidious
+        - Killed some younglings
+    - company_name: Jedi Academy
+      title: Jedi / General
+      location:
+        city: Jedi Temple
+        country: Coruscant
+      from:
+        year: 2011
+      to:
+        year: 2016
+      description:
+        - Learn the force with my master Obiwan Kenobi
+        - Helped the clones during the Clone wars
+        - Freed the princess of Naboo
+        - Killed the Count Dooku
+projects:
+  title: Open-source Projects
+  content:
+    - name: padme
+      url: https://padme.cc
+      description: a multiplatform gameboy engine
+      skills:
+        - name: Rust
+        - name: React.js
+    - name: lightsaber
+      description: A special lightsaber
+      skills:
+        - name: C++
+        - name: Qt
+education:
+  title: Education
+  include_page_break: true
+  content:
+    - company_name: Jedi Academy
+      title: Jedi / General
+      location:
+        city: Jedi Temple
+        country: Coruscant
+      from:
+        year: 2011
+      to:
+        year: 2016
+      description:
+        - Learn the force with my master Obiwan Kenobi
+        - Helped the clones during the Clone wars
+        - Freed the princess of Naboo
+        - Killed the Count Dooku

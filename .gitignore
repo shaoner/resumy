@@ -1,0 +1,10 @@
+/build
+/dist
+*.egg-info
+.eggs/
+.tox
+kashyyyk/__pycache__
+docs/_build/
+**/*.pyc
+/venv
+*.pdf

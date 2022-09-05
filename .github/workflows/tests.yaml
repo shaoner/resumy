@@ -1,0 +1,30 @@
+name: tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - {name: 'python 3.8', python: '3.8', tox: py38}
+          - {name: 'python 3.9', python: '3.9', tox: py39}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python }}
+
+    - name: Install requirements
+      run: |
+        pip install tox
+
+    - run: tox -e ${{ matrix.tox }}

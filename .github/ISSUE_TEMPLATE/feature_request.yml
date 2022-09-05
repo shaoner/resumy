@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest new or updated features to include in Resumy.
+title: "Suggest a new feature"
+labels: [feature]
+assignees: [alexlren]
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Please provide a clear and concise description of what feature you think is necessary.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation and context
+      description: Why is this change needed or helpful, and what problems it may help solve?
+    validations:
+      required: true

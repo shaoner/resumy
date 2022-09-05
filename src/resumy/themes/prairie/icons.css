@@ -1,0 +1,36 @@
+@font-face {
+    font-family: "prairie";
+    src:  url("fonts/prairie.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+.icon {
+    font-family: 'prairie';
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.icon-link:before {
+    content: "\e900";
+}
+.icon-location-pin:before {
+    content: "\e901";
+}
+.icon-mail:before {
+    content: "\e902";
+}
+.icon-phone:before {
+    content: "\e903";
+}
+.icon.icon-github:before {
+    content: "\e904";
+}
+.icon-linkedin:before {
+    content: "\e905";
+}

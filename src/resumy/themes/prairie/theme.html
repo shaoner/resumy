@@ -1,0 +1,79 @@
+{% macro work_list(wlist) -%}
+<ul class="work-list">
+    {% for exp in wlist %}
+    <li>
+        <div class="work-title">{{ exp.title }}</div>
+        <div class="work-subheader">
+            <div class="work-company">{{ exp.company_name }}</div>
+            <div class="work-date">{{ exp.from.month }} {{ exp.from.year }} - {% if exp.present %}{{ exp.present }}{% else %}{{ exp.to.month }} {{ exp.to.year }}{% endif %}</div>
+        </div>
+        <ul class="work-description">
+            {% for desc_line in exp.description %}
+            <li>{{ desc_line }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+{%- endmacro -%}
+
+<h1>{{ profile.firstname }} {{profile.lastname }}</h1>
+{% if profile.title %}
+<p>{{ profile.title }}</p>
+{% endif %}
+<ul class="header">
+    {% if profile.phone %}
+    <li><span class="icon icon-phone"></span> {{ profile.phone }}</li>
+    {% endif %}
+    {% if profile.email %}
+    <li><span class="icon icon-mail"></span> <a href="mailto:{{ profile.email }}">{{ profile.email }}</a></li>
+    {% endif %}
+    {% if profile.github_username %}
+    <li><span class="icon icon-github"></span> <a href="https://github.com/{{ profile.github_username }}">{{ profile.github_username }}</a></li>
+    {% endif %}
+    {% if profile.linkedin_username %}
+    <li><span class="icon icon-linkedin"></span> <a href="https://linkedin.com/{{ profile.linkedin_username }}">{{ profile.linkedin_username }}</a></li>
+    {% endif %}
+    {% if profile.portfolio_url %}
+    <li><span class="icon icon-link"></span> <a href="{{ profile.portfolio_url }}">{{ profile.portfolio_url }}</a></li>
+    {% endif %}
+    {% if profile.city %}
+    <li><span class="icon icon-location-pin"></span>{{ profile.city }}{% if profile.country %} ({{ profile.country }}){% endif %}</li>
+    {% endif %}
+</ul>
+
+{%- if skills.include_page_break -%}
+<p style="page-break-before: always"></p>
+{%- endif -%}
+
+<h2>{{ skills.title|default('Skills') }}</h2>
+<ul class="keyval-list">
+    {% for skill_category in skills.content %}
+    <li><span class="key-title">{{ skill_category.title }}</span>: {{ skill_category.content|join(', ', attribute='name') }}</li>
+    {% endfor %}
+</ul>
+
+{%- if job_experience.include_page_break -%}
+<p style="page-break-before: always"></p>
+{%- endif -%}
+
+<h2>{{ job_experience.title|default('Experience') }}</h2>
+{{ work_list(job_experience.content) }}
+
+{%- if projects.include_page_break -%}
+<p style="page-break-before: always"></p>
+{%- endif -%}
+
+<h2>{{ projects.title|default('Projects') }}</h2>
+<ul class="keyval-list">
+    {% for project in projects.content %}
+    <li><span class="key-title">{{ project.name }}</span>: {{ project.description }}{% if project.url %} (<a href=" {{ project.url }}">{{ project.url }}</a>){% endif %}{% if project.skills|length > 0 %} ({{ project.skills|join(', ', attribute='name') }}){% endif %}</li>
+    {% endfor %}
+</ul>
+
+{%- if education.include_page_break -%}
+<p style="page-break-before: always"></p>
+{%- endif -%}
+
+<h2>{{ education.title|default('Education') }}</h2>
+{{ work_list(education.content) }}
