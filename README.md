@@ -1,5 +1,16 @@
 # resumy
 
+[![PyPI version](https://badge.fury.io/py/resumy.svg)](https://badge.fury.io/py/resumy)
+![build status](https://github.com/alexlren/estel_secp256k1/actions/workflows/ci.yaml/badge.svg)
+
+<img src="/docs/demo.png" width="300"/>
+
+## Install
+
+```
+pip install resumy
+```
+
 ## Commands
 
 ### Usage
