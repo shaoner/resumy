@@ -11,6 +11,8 @@
 pip install resumy
 ```
 
+If you are on Windows (10 or 11), you will also need to install the GTK for Windows Runtime Environment installer. You can install this [here](https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases)
+
 ## Commands
 
 ### Usage
