@@ -138,6 +138,19 @@ def cmd_build(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_validate(args: argparse.Namespace) -> int:
+    try:
+        config = load_yaml(args.config_path)
+        validate_config(config, args.schema)
+    except ValidationError as err:
+        logger.error('Validation error')
+        logger.error(err)
+        return 2
+    else:
+        print('Your config file is valid ✔')  # noqa: T201
+    return 0
+
+
 def cmd_init(args: argparse.Namespace) -> int:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config_file = os.path.join(script_dir, 'config.example.yaml')
@@ -212,6 +225,17 @@ def main() -> int:
         help='output theme name',
     )
     themeparser.set_defaults(cmd=cmd_theme)
+
+    validateparser = cmdparsers.add_parser('validate', help='check that a config file is valid')
+    validateparser.add_argument(
+        '-s', '--schema', type=str, default=DEFAULT_SCHEMA,
+        help='either the schema name (in schemas/) or an absolute path to a schema file',
+    )
+    validateparser.add_argument(
+        'config_path', type=str,
+        help='path to a config yaml file, see config.example.yaml',
+    )
+    validateparser.set_defaults(cmd=cmd_validate)
 
     args = parser.parse_args()
 
