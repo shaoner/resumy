@@ -2,12 +2,15 @@ name: tests
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - 'chore/**'
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  test:
+  linting:
     name: ${{ matrix.name }}
     runs-on: ubuntu-latest
     strategy:
@@ -28,3 +31,34 @@ jobs:
         pip install tox
 
     - run: tox -e ${{ matrix.tox }}
+  dependencies:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 3
+      matrix:
+        os: [ubuntu-latest, windows-2019, windows-2022]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Create a virtual env
+      run: |
+        python -m venv venv
+
+    - name: Source venv
+      if: runner.os == 'Linux'
+      run: |
+        source venv/bin/activate
+
+    - name: Source venv
+      if: runner.os == 'Windows'
+      run: |
+        .\venv\Scripts\activate
+
+    - name: Install dependencies
+      run: |
+        pip install -e .
