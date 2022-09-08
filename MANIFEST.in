@@ -1,2 +1,3 @@
 include src/resumy/*.yaml
 graft src/resumy/themes
+graft src/resumy/schemas

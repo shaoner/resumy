@@ -1,0 +1,219 @@
+type: object
+properties:
+  version:
+    type: string
+    pattern: '[0-9]+\.[0-9]+\.[0-9]+'
+  profile:
+    type: object
+    required:
+      - firstname
+      - lastname
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      title:
+        type: string
+      github_username:
+        type: string
+      linkedin_username:
+        type: string
+      country:
+        type: string
+      city:
+        type: string
+      portfolio_url:
+        type: string
+        format: uri
+      email:
+        type: string
+        format: email
+      phone:
+        type: string
+  skills:
+    type: object
+    required:
+      - content
+    properties:
+      title:
+        type: string
+      include_page_break:
+        type: boolean
+        default: false
+      content:
+        type: array
+        items:
+          type: object
+          required:
+            - title
+            - content
+          properties:
+            title:
+              type: string
+            category:
+              type: string
+            content:
+              type: array
+              items:
+                type: object
+                required:
+                  - name
+                properties:
+                  name:
+                    type: string
+                  experience:
+                    type: integer
+                    minimum: 1
+              
+  job_experience:
+    type: object
+    required:
+      - content
+    properties:
+      title:
+        type: string
+      include_page_break:
+        type: boolean
+        default: false
+      content:
+        type: array
+        items:
+          type: object
+          required:
+            - company_name
+            - title
+            - from
+          oneOf:
+            - required:
+                - to
+            - required:
+                - present
+          properties:
+            company_name:
+              type: string
+            title:
+              type: string
+            location:
+              type: object
+              required:
+                - city
+                - country
+              properties:
+                city:
+                  type: string
+                country:
+                  type: string
+            from:
+              type: object
+              required:
+                - year
+              properties:
+                month: 
+                  type: string
+                year:
+                  type: integer
+                  minimum: 1900
+            to:
+              type: object
+              required:
+                - year
+              properties:
+                month: 
+                  type: string
+                year:
+                  type: integer
+                  minimum: 1900
+            present:
+              type: string
+            description:
+              type: array
+              items:
+                type: string
+  projects:
+    type: object
+    properties:
+      title:
+        type: string
+      include_page_break:
+        type: boolean
+        default: false
+      content:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+              format: uri
+            description:
+              type: string
+            skills:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+  education:
+    type: object
+    required:
+      - content
+    properties:
+      title:
+        type: string
+      include_page_break:
+        type: boolean
+        default: false
+      content:
+        type: array
+        items:
+          type: object
+          required:
+            - company_name
+            - title
+            - from
+            - to
+          properties:
+            company_name:
+              type: string
+            title:
+              type: string
+            location:
+              type: object
+              required:
+                - city
+                - country
+              properties:
+                city:
+                  type: string
+                country:
+                  type: string
+            from:
+              type: object
+              required:
+                - year
+              properties:
+                month: 
+                  type: string
+                year:
+                  type: integer
+                  minimum: 1900
+            to:
+              type: object
+              required:
+                - year
+              properties:
+                month: 
+                  type: string
+                year:
+                  type: integer
+                  minimum: 1900
+            present:
+              type: string
+            description:
+              type: array
+              items:
+                type: string

@@ -8,6 +8,7 @@ from typing import Any, Dict, cast
 
 import jinja2
 import yaml
+from jsonschema import ValidationError, validate
 from weasyprint import HTML  # type: ignore
 from weasyprint.document import DocumentMetadata  # type: ignore
 
@@ -15,25 +16,37 @@ DATE_FORMAT = '%Y-%m-%d'
 DEFAULT_OUTPUT_FILENAME = 'out.pdf'
 DEFAULT_CONFIG_FILENAME = 'myconfig.yaml'
 DEFAULT_MYTHEME_NAME = 'mytheme'
+DEFAULT_SCHEMAS_DIR = 'schemas'
+DEFAULT_SCHEMA = 'resumy.yaml'
 DEFAULT_THEMES_DIR = 'themes'
 DEFAULT_THEME = 'prairie'
 
 # Type aliases
-Config = Dict[str, Any]
+Yaml = Dict[str, Any]
 
 # Setup logger
 logger = logging.getLogger('resumy')
 logger.setLevel(logging.INFO)
 
 
-def get_config(config_path: str) -> Config:
+def load_yaml(config_path: str) -> Yaml:
     config = {}
     with open(config_path, 'r') as stream:
         config = yaml.safe_load(stream)
     return config
 
 
-def create_resume(config: Config,
+def validate_config(config: Yaml, schema_file: str) -> None:
+    if schema_file[0] != '/':
+        cur_dir = os.path.dirname(os.path.abspath(__file__))
+        schema_path = os.path.abspath(os.path.join(cur_dir, DEFAULT_SCHEMAS_DIR, schema_file))
+    else:
+        schema_path = schema_file
+    schema = load_yaml(schema_path)
+    validate(instance=config, schema=schema)
+
+
+def create_resume(config: Yaml,
                   output_file: str,
                   theme_path: str,
                   metadata: DocumentMetadata) -> None:
@@ -69,7 +82,7 @@ def create_resume(config: Config,
     doc.write_pdf(output_file)
 
 
-def normalize_args(args: argparse.Namespace, config: Config) -> argparse.Namespace:
+def normalize_args(args: argparse.Namespace, config: Yaml) -> argparse.Namespace:
     now = datetime.now().strftime(DATE_FORMAT)
 
     if args.auto_metadata:
@@ -93,10 +106,16 @@ def normalize_args(args: argparse.Namespace, config: Config) -> argparse.Namespa
 
 def cmd_build(args: argparse.Namespace) -> int:
     try:
-        config = get_config(args.config_path)
+        config = load_yaml(args.config_path)
+        validate_config(config, args.schema)
+    except ValidationError as err:
+        logger.error('Validation error')
+        logger.error(err)
+        return 2
     except IOError as err:
         logger.error(err)
         return err.errno
+
     args = normalize_args(args, config)
     theme_path = args.theme
     if args.theme[0] != '/':
@@ -169,6 +188,10 @@ def main() -> int:
     buildparser.add_argument(
         '-t', '--theme', type=str, default=DEFAULT_THEME,
         help='either the theme name (in themes/) or an absolute path to a theme directory',
+    )
+    buildparser.add_argument(
+        '-s', '--schema', type=str, default=DEFAULT_SCHEMA,
+        help='either the schema name (in schemas/) or an absolute path to a schema file',
     )
     buildparser.add_argument(
         'config_path', type=str,
