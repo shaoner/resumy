@@ -17,7 +17,7 @@ DEFAULT_OUTPUT_FILENAME = 'out.pdf'
 DEFAULT_CONFIG_FILENAME = 'myconfig.yaml'
 DEFAULT_MYTHEME_NAME = 'mytheme'
 DEFAULT_SCHEMAS_DIR = 'schemas'
-DEFAULT_SCHEMA = 'resumy.yaml'
+DEFAULT_SCHEMA = 'jsonschema.yaml'
 DEFAULT_THEMES_DIR = 'themes'
 DEFAULT_THEME = 'prairie'
 

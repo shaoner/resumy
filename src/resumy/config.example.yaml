@@ -1,106 +1,74 @@
-version: 0.0.1
-profile:
-  firstname: Anakin
-  lastname: Skywalker
-  github_username: alexlren
-  linkedin_username: anakin
-  country: Tatooine
-  city: Mos Eisley
-  portfolio_url: https://shaoner.com
+basics:
   email: anakin@skywalker.com
+  location:
+    city: Mos Eisley
+    countryCode: Tatooine
+  name: Anakin Skywalker
   phone: 123-456-7890
-skills:
-  title: Skills
-  content:
-    - title: Languages
-      category: languages
-      content:
-        - name: Rust
-          experience: 3
-        - name: Python
-          experience: 10
-    - title: Frameworks/libraries
-      category: frameworks
-      content:
-        - name: numpy
-        - name: Qt
-    - title: Devops
-      category: devops
-      content:
-        - name: AWS
-        - name: docker
-          experience: 10
-        - name: kubernetes
-    - title: Tools
-      category: tools
-      content:
-        - name: emacs
-        - name: Makefile
-    - title: OS
-      category: os
-      content:
-        - name: Linux
-        - name: FreeBSD
-job_experience:
-  title: Experience
-  content:
-    - company_name: Empire
-      title: Darth Vader
-      location:
-        city: Mothership
-        country: US
-      from:
-        month: Aug
-        year: 2016
-      present: 'Present'
-      description:
-        - Killed a few rebels here and there
-        - Tracked Jedi all around the galaxy
-        - Practiced the force with my master Darth Sidious
-        - Killed some younglings
-    - company_name: Jedi Academy
-      title: Jedi / General
-      location:
-        city: Jedi Temple
-        country: Coruscant
-      from:
-        year: 2011
-      to:
-        year: 2016
-      description:
-        - Learn the force with my master Obiwan Kenobi
-        - Helped the clones during the Clone wars
-        - Freed the princess of Naboo
-        - Killed the Count Dooku
-projects:
-  title: Open-source Projects
-  content:
-    - name: padme
-      url: https://padme.cc
-      description: a multiplatform gameboy engine
-      skills:
-        - name: Rust
-        - name: React.js
-    - name: lightsaber
-      description: A special lightsaber
-      skills:
-        - name: C++
-        - name: Qt
+  profiles:
+  - network: Github
+    url: https://github.com/alexlren
+    username: alexlren
+  - network: Linkedin
+    url: https://www.linkedin.com/anakin
+    username: anakin
+  url: https://shaoner.com
 education:
-  title: Education
-  include_page_break: true
-  content:
-    - company_name: Jedi Academy
-      title: Jedi / General
-      location:
-        city: Jedi Temple
-        country: Coruscant
-      from:
-        year: 2011
-      to:
-        year: 2016
-      description:
-        - Learn the force with my master Obiwan Kenobi
-        - Helped the clones during the Clone wars
-        - Freed the princess of Naboo
-        - Killed the Count Dooku
+- area: Jedi / General
+  institution: Jedi Academy
+  startDate: '2011-01-01'
+meta:
+  breaks_before:
+    education: true
+projects:
+- description: a multiplatform gameboy engine
+  keywords:
+  - Rust
+  - React.js
+  name: padme
+  url: https://padme.cc
+- description: A special lightsaber
+  keywords:
+  - C++
+  - Qt
+  name: lightsaber
+skills:
+- keywords:
+  - Rust
+  - Python
+  name: Languages
+- keywords:
+  - numpy
+  - Qt
+  name: Frameworks/libraries
+- keywords:
+  - AWS
+  - docker
+  - kubernetes
+  name: Devops
+- keywords:
+  - emacs
+  - Makefile
+  name: Tools
+- keywords:
+  - Linux
+  - FreeBSD
+  name: OS
+work:
+- highlights:
+  - Killed a few rebels here and there
+  - Tracked Jedi all around the galaxy
+  - Practiced the force with my master Darth Sidious
+  - Killed some younglings
+  name: Empire
+  position: Darth Vader
+  startDate: '2016-08-01'
+- endDate: '2016-01-01'
+  highlights:
+  - Learn the force with my master Obiwan Kenobi
+  - Helped the clones during the Clone wars
+  - Freed the princess of Naboo
+  - Killed the Count Dooku
+  name: Jedi Academy
+  position: Jedi / General
+  startDate: '2011-01-01'
