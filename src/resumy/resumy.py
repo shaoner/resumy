@@ -104,6 +104,100 @@ def normalize_args(args: argparse.Namespace, config: Yaml) -> argparse.Namespace
     return args
 
 
+def get_month_from(date: Yaml) -> str:
+    if 'month' in date:
+        return datetime.strptime(date['month'], '%b').strftime('%m')
+    return '01'
+
+
+def from_resumy_to_jsonschema(config: Yaml) -> Yaml:  # noqa: C901
+    profile = config['profile']
+    new_config: Yaml = {
+        'meta': {
+            'breaks_before': {},
+        },
+        'basics': {
+            'name': f"{profile['firstname']} {profile['lastname']}",
+            'email': profile['email'],
+            'phone': profile['phone'],
+            'url': profile['portfolio_url'],
+            'profiles': [],
+        },
+    }
+    if profile['city'] or profile['country']:
+        new_config['basics']['location'] = {
+            'city': profile['city'],
+            'countryCode': profile['country'],
+        }
+    if profile['github_username']:
+        new_config['basics']['profiles'].append({
+            'network': 'Github',
+            'username': profile['github_username'],
+            'url': f"https://github.com/{profile['github_username']}",
+        })
+    if profile['linkedin_username']:
+        new_config['basics']['profiles'].append({
+            'network': 'Linkedin',
+            'username': profile['linkedin_username'],
+            'url': f"https://www.linkedin.com/{profile['linkedin_username']}",
+        })
+    if config['skills']:
+        if 'include_page_break' in config['skills']:
+            new_config['meta']['breaks_before']['skills'] = True
+        new_config['skills'] = []
+        for skillcat in config['skills']['content']:
+            new_config['skills'].append({
+                'name': skillcat['title'],
+                'keywords': [skill['name'] for skill in skillcat['content']],
+            })
+    if config['job_experience']:
+        if 'include_page_break' in config['job_experience']:
+            new_config['meta']['breaks_before']['work'] = True
+        new_config['work'] = []
+        for work in config['job_experience']['content']:
+            from_month = get_month_from(work['from'])
+            new_work = {
+                'name': work['company_name'],
+                'position': work['title'],
+                'startDate': f"{work['from']['year']}-{from_month}-01",
+                'highlights': work['description'],
+            }
+            if 'present' not in work and 'to' in work:
+                to_month = get_month_from(work['to'])
+                new_work['endDate'] = f"{work['to']['year']}-{to_month}-01"
+            new_config['work'].append(new_work)
+    if config['education']:
+        if 'include_page_break' in config['education']:
+            new_config['meta']['breaks_before']['education'] = True
+        new_config['education'] = []
+        for edu in config['education']['content']:
+            from_month = get_month_from(edu['from'])
+            new_edu = {
+                'institution': edu['company_name'],
+                'area': edu['title'],
+                'startDate': f"{edu['from']['year']}-{from_month}-01",
+            }
+            if 'present' not in work:
+                to_month = get_month_from(edu['to'])
+                new_work['endDate'] = f"{edu['to']['year']}-{to_month}-01"
+            new_config['education'].append(new_edu)
+    if config['projects']:
+        if 'include_page_break' in config['projects']:
+            new_config['meta']['breaks_before']['projects'] = True
+        new_config['projects'] = []
+        for project in config['projects']['content']:
+            new_project = {
+                'name': project['name'],
+                'description': project.get('description', ''),
+                'keywords': [skill['name'] for skill in project['skills']],
+            }
+            if 'url' in project:
+                new_project['url'] = project['url']
+
+            new_config['projects'].append(new_project)
+    return new_config
+
+
 def cmd_build(args: argparse.Namespace) -> int:
     try:
         config = load_yaml(args.config_path)
@@ -117,6 +211,9 @@ def cmd_build(args: argparse.Namespace) -> int:
         return err.errno
 
     args = normalize_args(args, config)
+    # Not perfect but try to detect if the config is resumy or jsonresume friendly
+    if 'version' in config and config['version'] == '0.0.1':
+        config = from_resumy_to_jsonschema(config)
     theme_path = args.theme
     if args.theme[0] != '/':
         cur_dir = os.path.dirname(os.path.abspath(__file__))
