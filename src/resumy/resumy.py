@@ -262,6 +262,22 @@ def cmd_theme(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_normalize(args: argparse.Namespace) -> int:
+    try:
+        config = load_yaml(args.config_path)
+        validate_config(config, 'resumy.yaml')
+    except ValidationError as err:
+        logger.error('Validation error')
+        logger.error(err)
+        return 2
+
+    new_config = from_resumy_to_jsonschema(config)
+    with open(args.output, 'w') as yfile:
+        yaml.dump(new_config, yfile)
+
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     cmdparsers = parser.add_subparsers(dest='command')
@@ -333,6 +349,18 @@ def main() -> int:
         help='path to a config yaml file, see config.example.yaml',
     )
     validateparser.set_defaults(cmd=cmd_validate)
+
+    normparser = cmdparsers.add_parser('normalize',
+                                       help='transform a config to the jsonresume format')
+    normparser.add_argument(
+        'config_path', type=str,
+        help='path to a config yaml file, see config.example.yaml',
+    )
+    normparser.add_argument(
+        '-o', '--output', type=str, default=DEFAULT_CONFIG_FILENAME,
+        help='output config filename',
+    )
+    normparser.set_defaults(cmd=cmd_normalize)
 
     args = parser.parse_args()
 

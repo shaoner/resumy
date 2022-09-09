@@ -78,6 +78,14 @@ python src/resumy/resumy.py init
 python resumy/resumy.py build -o my_resume.pdf my_config.yaml
 ```
 
+## Migrating from v0.0.2
+
+It's now possible to transform the previous resumy format into the jsonresume standard:
+
+```
+resumy normalize my_config.yaml -s jsonresume.yaml -o my_new_config.yaml
+```
+
 ## Tests
 
 ### Linting with flake8
