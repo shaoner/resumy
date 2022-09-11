@@ -86,6 +86,14 @@ It's now possible to transform the previous resumy format into the jsonresume st
 resumy normalize my_config.yaml -s jsonresume.yaml -o my_new_config.yaml
 ```
 
+You can still use the original format, it is internally transformed into the new format
+
+```
+resumy build -o myresume.pdf --schema resumy.yaml myconfig.yaml
+```
+
+The old theme is not supported anymore, but it's not that hard to migrate it yourself.
+
 ## Tests
 
 ### Linting with flake8
