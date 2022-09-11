@@ -201,7 +201,8 @@ def from_resumy_to_jsonschema(config: Yaml) -> Yaml:  # noqa: C901
 def cmd_build(args: argparse.Namespace) -> int:
     try:
         config = load_yaml(args.config_path)
-        validate_config(config, args.schema)
+        if not args.disable_validation:
+            validate_config(config, args.schema)
     except ValidationError as err:
         logger.error('Validation error')
         logger.error(err)
@@ -319,6 +320,10 @@ def main() -> int:
         '-s', '--schema', type=str, default=DEFAULT_SCHEMA,
         help='either the schema name (in schemas/) or an absolute path to a schema file',
     )
+    buildparser.add_argument(
+        '--disable-validation', action='store_true',
+        help='Disable schema validation, in case you want your own customization',
+        )
     buildparser.add_argument(
         'config_path', type=str,
         help='path to a config yaml file, see config.example.yaml',
