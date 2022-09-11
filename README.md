@@ -33,7 +33,52 @@ resumy --help
 resumy init -o myconfig.yaml
 ```
 
-It makes it easier to support multiple languages (i.e. multiple config files)
+This creates a file that you can easily edit:
+
+```
+basics:
+  email: anakin@skywalker.com
+  location:
+    city: Mos Eisley
+    countryCode: Tatooine
+  name: Anakin Skywalker
+  phone: 123-456-7890
+  profiles:
+  - network: Github
+    url: https://github.com/alexlren
+    username: alexlren
+  - network: Linkedin
+    url: https://www.linkedin.com/anakin
+    username: anakin
+  url: https://shaoner.com
+education:
+- area: Jedi / General
+  institution: Jedi Academy
+  startDate: '2011-01-01'
+projects:
+- description: a multiplatform gameboy engine
+  keywords:
+  - Rust
+  - React.js
+  name: padme
+  url: https://padme.cc
+skills:
+- keywords:
+  - Rust
+  - Python
+  name: Languages
+work:
+- highlights:
+  - Killed a few rebels here and there
+  - Tracked Jedi all around the galaxy
+  - Practiced the force with my master Darth Sidious
+  - Killed some younglings
+  name: Empire
+  position: Darth Vader
+  startDate: '2016-08-01'
+```
+
+And it makes it easier to support multiple languages (i.e. multiple config files)
 
 ### Build a resume
 
