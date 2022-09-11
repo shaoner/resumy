@@ -5,6 +5,14 @@
 
 <img src="/docs/demo.png" width="300"/>
 
+### Features
+
+- Now supports the [jsonresume](https://jsonresume.org/schema/) format
+- A default theme already supported
+- Easy to create a theme or a config file
+- Configs and schemas are both in yaml format
+- Exports a pdf
+
 ## Install
 
 ```
