@@ -60,7 +60,7 @@ def create_resume(config: Yaml,
         raise IOError(f"No such file or directory: '{err}'")
 
     # 2. Create a html from both the theme and the config file
-    html_resume = template.render(config)
+    html_resume = template.render(config, strptime=datetime.strptime)
 
     # 3. Add css automatically
     css_list = []
