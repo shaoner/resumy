@@ -21,6 +21,10 @@ pip install resumy
 
 **It may not work out of the box as some external dynamic libraries are necessary depending on your platform, please take a look at the weasyprint documentation page: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html**
 
+## CI
+
+An easy way to create your resume is to host your yaml file in a git repository and build it automatically + host it somewhere each time you push new changes. You can fork [resumy_workflow](https://github.com/alexlren/resumy_workflow) for an example on github.
+
 ## Commands
 
 ### Usage
