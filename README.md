@@ -11,7 +11,7 @@
 - A default theme already supported
 - Easy to create a theme or a config file
 - Configs and schemas are both in yaml format
-- Exports a pdf
+- Exports in pdf or html
 
 ## Install
 
@@ -91,6 +91,15 @@ And it makes it easier to support multiple languages (i.e. multiple config files
 ```
 resumy build -o myresume.pdf myconfig.yaml
 ```
+
+Alternatively, it's possible to export it in html:
+
+```
+resumy build -o /tmp/myresume.html -f html myconfig.yaml
+```
+
+Note that in this case, the `assets/` folder of your theme is copied in the same directory
+
 
 ### Create and use your own theme
 
