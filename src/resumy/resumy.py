@@ -142,7 +142,7 @@ def create_resume(config: Yaml,
         export_to_pdf(html_resume, css_list, output_file, metadata)
 
 
-def normalize_args(args: argparse.Namespace, config: Yaml) -> argparse.Namespace:
+def normalize_metadata(args: argparse.Namespace, config: Yaml) -> argparse.Namespace:
     now = datetime.now().strftime(DATE_FORMAT)
 
     if args.auto_metadata:
@@ -161,6 +161,18 @@ def normalize_args(args: argparse.Namespace, config: Yaml) -> argparse.Namespace
         if len(args.keyword) == 0:
             args.keyword = ['resume']
 
+    return args
+
+
+def normalize_format(args: argparse.Namespace) -> argparse.Namespace:
+    if not args.format:
+        [_, ext] = os.path.splitext(args.output)
+        if ext == '.html':
+            args.format = 'html'
+        elif ext == '.pdf':
+            args.format = 'pdf'
+        else:
+            args.format = DEFAULT_FMT
     return args
 
 
@@ -271,7 +283,9 @@ def cmd_build(args: argparse.Namespace) -> int:
         logger.error(err)
         return err.errno
 
-    args = normalize_args(args, config)
+    args = normalize_metadata(args, config)
+    args = normalize_format(args)
+
     # Not perfect but try to detect if the config is resumy or jsonresume friendly
     if 'version' in config and config['version'] == '0.0.1':
         config = from_resumy_to_jsonschema(config)
@@ -385,7 +399,7 @@ def main() -> int:
         help='Disable schema validation, in case you want your own customization',
     )
     buildparser.add_argument(
-        '-f', '--format', type=str, default=DEFAULT_FMT, choices=['html', 'pdf'],
+        '-f', '--format', type=str, default=None, choices=['html', 'pdf'],
         help='Format: html, pdf',
     )
     buildparser.add_argument(
