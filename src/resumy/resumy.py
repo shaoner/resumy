@@ -4,7 +4,7 @@ import os
 import shutil
 import sys
 from datetime import datetime
-from typing import Any, Dict, cast
+from typing import Any, Dict, List, cast
 
 import jinja2
 import yaml
@@ -20,6 +20,8 @@ DEFAULT_SCHEMAS_DIR = 'schemas'
 DEFAULT_SCHEMA = 'jsonresume.yaml'
 DEFAULT_THEMES_DIR = 'themes'
 DEFAULT_THEME = 'prairie'
+DEFAULT_FMT = 'pdf'
+DEFAULT_ASSETS_DIR = 'assets'
 
 # Type aliases
 Yaml = Dict[str, Any]
@@ -46,9 +48,71 @@ def validate_config(config: Yaml, schema_file: str) -> None:
     validate(instance=config, schema=schema)
 
 
+def export_to_html(
+        resume_html: str,
+        css_list: List[str],
+        theme_path: str,
+        output_file: str,
+        metadata: DocumentMetadata,
+) -> None:
+    assets_dir = os.path.join(theme_path, DEFAULT_ASSETS_DIR)
+    base_dir = os.path.dirname(output_file)
+    new_assets_dir = os.path.join(base_dir, DEFAULT_ASSETS_DIR)
+    shutil.copytree(assets_dir, new_assets_dir)
+    keywords = metadata.keywords or []
+    title = metadata.title or os.path.basename(output_file)
+    meta = {
+        'author': ', '.join(metadata.authors),
+        'keywords': ', '.join(keywords),
+        'created': metadata.created,
+        'modified': metadata.modified,
+    }
+    meta_html = '\n'.join(
+        f"""\t<meta name=\"{key}\" content=\"{content}\">"""
+        for key, content in meta.items()
+        if content
+    )
+    css_html = '\n'.join(
+        f"""\t<link rel=\"stylesheet\" href=\"{DEFAULT_ASSETS_DIR}/{os.path.basename(css)}\">"""
+        for css in css_list
+    )
+
+    html = f"""<!doctype html>
+ <html>
+    <head>
+    <title>{title}</title>
+ {meta_html}
+ {css_html}
+    </head>
+    <body>
+    {resume_html}
+    </body>
+ </html>
+    """
+    with open(output_file, 'w') as f:
+        f.write(html)
+
+
+def export_to_pdf(
+        html_resume: str,
+        css_list: List[str],
+        output_file: str,
+        metadata: DocumentMetadata,
+) -> None:
+    html = HTML(string=html_resume, media_type='print')
+    doc = html.render(
+        stylesheets=css_list,
+        optimize_size=('fonts'),
+    )
+    doc.metadata = metadata
+    logger.info(f'export to {output_file}')
+    doc.write_pdf(output_file)
+
+
 def create_resume(config: Yaml,
                   output_file: str,
                   theme_path: str,
+                  fmt: str,
                   metadata: DocumentMetadata) -> None:
     # 1. Retrieve theme
     env = jinja2.Environment(
@@ -64,22 +128,18 @@ def create_resume(config: Yaml,
 
     # 3. Add css automatically
     css_list = []
-    theme_lsdir = os.listdir(theme_path)
+    theme_lsdir = os.listdir(os.path.join(theme_path, DEFAULT_ASSETS_DIR))
     for theme_file in theme_lsdir:
         [_, ext] = os.path.splitext(theme_file)
         if ext != '.css':
             continue
-        css_list.append(os.path.join(theme_path, theme_file))
+        css_list.append(os.path.join(theme_path, DEFAULT_ASSETS_DIR, theme_file))
 
     # 4. Export a pdf
-    html = HTML(string=html_resume, media_type='print')
-    doc = html.render(
-        stylesheets=css_list,
-        optimize_size=('fonts'),
-    )
-    doc.metadata = metadata
-    logger.info(f'export to {output_file}')
-    doc.write_pdf(output_file)
+    if fmt == 'html':
+        export_to_html(html_resume, css_list, theme_path, output_file, metadata)
+    elif fmt == 'pdf':
+        export_to_pdf(html_resume, css_list, output_file, metadata)
 
 
 def normalize_args(args: argparse.Namespace, config: Yaml) -> argparse.Namespace:
@@ -222,14 +282,14 @@ def cmd_build(args: argparse.Namespace) -> int:
 
     metadata = DocumentMetadata(
         title=args.title,
-        authors=args.author,
+        authors=[args.author] if args.author else [],
         keywords=args.keyword,
         created=args.created_date,
         modified=args.modified_date,
     )
 
     try:
-        create_resume(config, args.output, theme_path, metadata)
+        create_resume(config, args.output, theme_path, args.format, metadata)
     except IOError as err:
         logger.error(err)
         return err.errno
@@ -323,7 +383,11 @@ def main() -> int:
     buildparser.add_argument(
         '--disable-validation', action='store_true',
         help='Disable schema validation, in case you want your own customization',
-        )
+    )
+    buildparser.add_argument(
+        '-f', '--format', type=str, default=DEFAULT_FMT, choices=['html', 'pdf'],
+        help='Format: html, pdf',
+    )
     buildparser.add_argument(
         'config_path', type=str,
         help='path to a config yaml file, see config.example.yaml',
