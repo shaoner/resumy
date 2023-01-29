@@ -3,7 +3,11 @@
 {%- endmacro -%}
 
 {%- macro format_date_range(exp) -%}
-{{ format_str_date(exp.startDate) }} - {% if exp.endDate %}{{ format_str_date(exp.endDate) }}{% else %}Present{% endif %}
+{% if exp.startDate %}{{ format_str_date(exp.startDate) }} - {% else %}{% endif %}{% if exp.endDate %}{{ format_str_date(exp.endDate) }}{% else %}Present{% endif %}
+{%- endmacro -%}
+
+{%- macro format_edu_date_range(exp) -%}
+{% if exp.startDate %}{{ exp.startDate }} - {% else %}{% endif %}{% if exp.endDate %}{{ exp.endDate }}{% else %}Present{% endif %}
 {%- endmacro -%}
 
 <h1>{{ basics.name }}</h1>
@@ -63,7 +67,7 @@
 <h2>Experience</h2>
 <ul class="work-list">
     {% for exp in work %}
-    <li>
+    <li style="break-before:auto; break-after:auto;break-inside:avoid">
         <div class="work-title">{{ exp.position }}</div>
         <div class="work-subheader">
             <div class="work-company">{% if exp.url %}<a href="{{ exp.url }}">{{ exp.name }}</a>{% else %}{{ exp.name }}{% endif %}</div>
@@ -74,7 +78,7 @@
             <li>{{ desc_line }}</li>
             {% endfor %}
         </ul>
-    </li>
+    </li> 
     {% endfor %}
 </ul>
 
@@ -82,15 +86,17 @@
 <p style="page-break-before: always"></p>
 {%- endif -%}
 
+{%- if project -%}
 <h2>Projects</h2>
 <ul class="keyval-list">
     {% for project in projects %}
     <li><span class="key-title">{{ project.name }}</span>: {{ project.description }}{% if project.url %} (<a href=" {{ project.url }}">{{ project.url }}</a>){% endif %}{% if project.keywords|length > 0 %} ({{ project.keywords|join(', ') }}){% endif %}</li>
     {% endfor %}
 </ul>
+{%- endif -%}
 
 {%- if meta and meta.breaks_before.education -%}
-<p style="page-break-before: always"></p>
+<p style="break-before: always"></p>
 {%- endif -%}
 
 <h2>Education</h2>
@@ -100,8 +106,27 @@
         <div class="work-title">{{ exp.area }}</div>
         <div class="work-subheader">
             <div class="work-company">{{ exp.institution }}</div>
-            <div class="work-date">{{ format_date_range(exp) }}</div>
+            <div class="work-date">{{ format_edu_date_range(exp) }}</div>
         </div>
     </li>
     {% endfor %}
 </ul>
+
+{%- if meta and meta.breaks_before.references -%}
+<p style="break-before: always"></p>
+{%- endif -%}
+
+{%- if references -%}
+<h2>References</h2>
+<ul class="work-list">
+    {% for ref in references %}
+    <li>
+        <div class="work-title">{{ ref.name }}</div>
+        <div>{{ ref.title }}</div>
+        <div><a href="mailto:{{ ref.email }}">{{ ref.email }}</a></div>
+        <div><a href="tel:{{ ref.phone|replace("(","")|replace(")","")|replace("-","") }}">{{ ref.phone }}</a></div>
+
+    </li>
+    {% endfor %}
+</ul>
+{%- endif -%}
