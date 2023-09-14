@@ -95,7 +95,7 @@ resumy build -o myresume.pdf myconfig.yaml
 ### Create and use your own theme
 
 ```
-resumy theme mytheme -o /tmp/mytheme
+resumy theme -o /tmp/mytheme
 ```
 
 Now you can simply edit /tmp/mytheme/theme.html and /tmp/mytheme/theme.css, and use your custom theme with `--theme` option.
