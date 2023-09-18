@@ -51,11 +51,19 @@ def create_resume(config: Yaml,
                   theme_path: str,
                   metadata: DocumentMetadata) -> None:
     # 1. Retrieve theme
+    # Use relative path if theme was invoked by name
+    if theme_path[0] != '/':
+        theme_name = os.path.basename(os.path.normpath(theme_path))
+        package_path = f'themes/{theme_name}'
+    # Use absolute path if theme was invoked by absolute path
+    else:
+        package_path = theme_path
+
     env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader('/'),
+        loader=jinja2.PackageLoader('resumy', package_path=package_path),
     )
     try:
-        template = env.get_template(f'{theme_path}/theme.html')
+        template = env.select_template('theme.html')
     except jinja2.exceptions.TemplateNotFound as err:
         raise IOError(f"No such file or directory: '{err}'")
 
