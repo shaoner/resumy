@@ -63,7 +63,7 @@ def create_resume(config: Yaml,
         loader=jinja2.PackageLoader('resumy', package_path=package_path),
     )
     try:
-        template = env.select_template('theme.html')
+        template = env.get_template('theme.html')
     except jinja2.exceptions.TemplateNotFound as err:
         raise IOError(f"No such file or directory: '{err}'")
 
