@@ -3,6 +3,7 @@
     {{ strptime(str_date, '%Y').strftime('%b %Y') }}
 {% else %}
     {{ strptime(str_date, '%Y-%m-%d').strftime('%b %Y') }}
+{% endif %}
 {%- endmacro -%}
 
 {%- macro format_date_range(exp) -%}
