@@ -1,5 +1,8 @@
 {%- macro format_str_date(str_date) -%}
-{{ strptime(str_date, '%Y-%m-%d').strftime('%b %Y') }}
+{% if some_var|length < 5 %}
+    {{ strptime(str_date, '%Y').strftime('%b %Y') }}
+{% else %}
+    {{ strptime(str_date, '%Y-%m-%d').strftime('%b %Y') }}
 {%- endmacro -%}
 
 {%- macro format_date_range(exp) -%}
