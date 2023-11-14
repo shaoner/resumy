@@ -72,3 +72,8 @@ work:
   name: Jedi Academy
   position: Jedi / General
   startDate: '2011-01-01'
+references:
+- name: Anakin Skywalker
+  title: Jedi
+  email: anakin@jedis.com
+  phone: '222-867-5309'

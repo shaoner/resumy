@@ -157,6 +157,27 @@ properties:
                 properties:
                   name:
                     type: string
+  references:
+    type: object
+    properties:
+      title:
+        type: string
+      include_page_break:
+        type: boolean
+        default: false
+      content:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            title:
+              type: string
+            email:
+              type: string
+            phone:
+              type: string
   education:
     type: object
     required:
