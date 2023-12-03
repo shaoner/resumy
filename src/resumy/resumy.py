@@ -52,10 +52,10 @@ def create_resume(config: Yaml,
                   metadata: DocumentMetadata) -> None:
     # 1. Retrieve theme
     env = jinja2.Environment(
-        loader=jinja2.FileSystemLoader('/'),
+        loader=jinja2.FileSystemLoader(theme_path),
     )
     try:
-        template = env.get_template(f'{theme_path}/theme.html')
+        template = env.get_template('theme.html')
     except jinja2.exceptions.TemplateNotFound as err:
         raise IOError(f"No such file or directory: '{err}'")
 
