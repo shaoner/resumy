@@ -55,10 +55,7 @@ def create_resume(config: Yaml,
         loader=jinja2.FileSystemLoader('/'),
     )
     try:
-        extensions = ['.html', '.jinja', '.html.jinja', '.j2']
-        template_paths = [f"theme{extension}" for extension in extensions]
-
-        template = env.select_template(template_paths)
+        template = env.get_template(f'{theme_path}/theme.html')
     except jinja2.exceptions.TemplateNotFound as err:
         raise IOError(f"No such file or directory: '{err}'")
 
