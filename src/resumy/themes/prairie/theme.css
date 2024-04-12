@@ -1,6 +1,6 @@
 @page {
     size: letter portrait;
-    margin: 0 1cm;
+    margin: 0.5cm 1cm;
 }
 
 @font-face {
@@ -36,7 +36,7 @@ h2 {
     text-transform: uppercase;
     margin-top: 24px;
     padding-bottom: 4px;
-    border-bottom: 2px solid #0a75ad;
+    border-bottom: 2px solid #ad0a0a;
 }
 
 a {
@@ -77,14 +77,17 @@ ul.header .icon {
 
 ul.work-list > li {
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .work-subheader {
     display: flex;
+    margin-bottom: 10px;
 }
 
 .work-company {
     flex-grow: 1;
+    margin-bottom: 10px;
 }
 
 .work-date {
@@ -100,4 +103,5 @@ ul.work-list > li {
     list-style-type: '•   ';
     padding: 0 24px;
     font-size: 10pt;
+    margin-bottom: 10px;
 }
